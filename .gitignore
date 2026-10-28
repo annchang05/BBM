@@ -12,3 +12,6 @@ testc3d/
 
 # ignore local data files 
 Elodie_test/
+Data/
+trial_plot
+opencap-processing
