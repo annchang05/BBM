@@ -1,0 +1,29 @@
+project:
+  type: website
+
+website:
+  title: "BBM Portfolio"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: background_information/background.qmd
+        text: Background
+      - href: methods/methods.qmd
+        text: Methods
+      - href: results/results.qmd
+        text: Results
+      - href: analysis_discussion/analysis_discussion.qmd
+        text: Analysis and Discussion
+      - about.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+
+
+
