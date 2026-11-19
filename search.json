@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "About BBM",
+    "section": "",
+    "text": "BBM (Best BioMechanics) is a team project researching squat biomechanics using OpenCap and OpenSim, and learning about data processing along the way!"
+  },
+  {
+    "objectID": "index.html#objective",
+    "href": "index.html#objective",
+    "title": "About BBM",
+    "section": "Objective",
+    "text": "Objective\nThe objective of this project is to quantify changes in squat biomechanics as load increases and to determine whether there are statistically significant variabilities in squat kinematics (joint angles and muscle forces) to identify common biomechanical mistakes or movement compensations during squatting. These questions summarize the main objectives:\n\nHow do joint angles change across progressive loading during squatting? Stretch goal: How do muscle forces change across progressive loading during squatting?\nDo joint kinematics and kinetics change such that they no longer match proper form as the load of a squat increases?\nHow does the above compare between people and to the proper squatting form determined from previous literature?\n\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  }
+]
