@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# External downloaded datasets/models from external repositories
+opensim-models/
+OpenSim/
+2354_xml/
+2354_result/
+testc3d/
+
+# ignore local data files 
+Elodie_test/
+Data/
+trial_plot
+opencap-processing
