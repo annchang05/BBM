@@ -1,0 +1,23 @@
+OpenCap Squat Min/Max Summary
+=================================
+Kinematics (Angles in degrees):
+- Hip Flexion (R): Max = 108.49°, Min = -6.04°
+- Hip Flexion (L): Max = 107.55°, Min = -7.11°
+- Hip Adduction (R): Max = 3.63°, Min = -4.97°
+- Hip Adduction (L): Max = -12.45°, Min = -28.63°
+- Hip Rotation (R): Max = 24.59°, Min = -10.32°
+- Hip Rotation (L): Max = 19.31°, Min = -10.44°
+- Knee Angle (R): Max = 125.73°, Min = 0.00°
+- Knee Angle (L): Max = 126.81°, Min = 0.00°
+- Trunk Extension: Max = 8.48°, Min = -49.65°
+
+Kinetics (Moments in N·m):
+- Hip Flexion Moment (R): Max = -33.08, Min = -171.92
+- Hip Flexion Moment (L): Max = 5.57, Min = -143.52
+- Hip Adduction Moment (R): Max = 73.90, Min = 28.64
+- Hip Adduction Moment (L): Max = 100.73, Min = -0.23
+- Hip Rotation Moment (R): Max = 19.66, Min = 3.20
+- Hip Rotation Moment (L): Max = 17.53, Min = 0.56
+- Knee Moment (R): Max = -26.36, Min = -91.92
+- Knee Moment (L): Max = 1.21, Min = -73.13
+- Trunk Moment: Max = 24.38, Min = -0.60

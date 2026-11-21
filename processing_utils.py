@@ -6,6 +6,7 @@ import pandas as pd
 from pathlib import Path
 import numpy as np
 import plotly.graph_objects as go
+from scipy.signal import find_peaks
 
 def generate_dict(path):
     """Generating a dict for each given weight condition"""
@@ -36,6 +37,28 @@ def load_file(file_name: str | Path) -> pd.DataFrame:
     header_row_idx = judge_line_number(file_name) - 1  
     df = pd.read_csv(file_name, sep=r"\s+", skiprows=header_row_idx)
     return df
+
+def get_five_peaks(data, min_distance=1):
+    """Takes a single 1D series of numbers and returns the values of the 5 most prominent peaks
+       in the order they appear.
+    """
+    y = np.asarray(data, dtype=float)
+
+    # 1. Detect all peaks; prominence filters out tiny baseline ripples
+    peaks, properties = find_peaks(
+        y, distance=min_distance, prominence=0.05 * np.ptp(y)
+    )
+
+    # 2. If more than 5 peaks exist, keep the 5 most prominent ones
+    if len(peaks) > 5:
+        top_5_indices = np.argsort(properties["prominences"])[-5:]
+        peaks = peaks[top_5_indices]
+
+    # 3. Sort the peaks in chronological order (left-to-right)
+    peaks = np.sort(peaks)
+
+    # 4. Return the actual numbers at those peak positions
+    return y[peaks]
 
 def extract_participant_data(
         subject_path: str,
@@ -130,7 +153,7 @@ def extract_participant_data(
         ),
     ]
 
-    min_max_stats: dict[str, dict[str, float]] = {}
+    min_max_stats: dict[str, dict[str, float]] = {}     #nested dictionary 
     condition_label = Path(squat_condition).stem
     subject_label = subject_dir.name
     os.makedirs(output_folder, exist_ok=True)
@@ -146,12 +169,20 @@ def extract_participant_data(
 
             has_data = True
             series = df_ik[col_name]
-            max_val = float(series.max())
-            min_val = float(series.min())
-            min_max_stats[col_name] = {"max": max_val, "min": min_val}
+            max_vals = get_five_peaks(series)
+            # five peaks finds highest, so we invert the series and then solve.
+            min_vals = -1*get_five_peaks(-1*series)
+            #max_val = float(series.max())
+            #min_val = float(series.min())
+            min_max_stats[col_name] = {"max": max_vals, "min": min_vals}
 
-            print(f"max_{col_name} = {max_val:.4f} degrees")
-            print(f"min_{col_name} = {min_val:.4f} degrees")
+            max_str = ", ".join(f"{v:.4f}" for v in max_vals)
+            min_str = ", ".join(f"{v:.4f}" for v in min_vals)
+
+            print(f"max_{col_name} = [{max_str}] degrees")
+            print(f"min_{col_name} = [{min_str}] degrees")
+            #print(f"max_{col_name} = {max_val:.4f} degrees")
+            #print(f"min_{col_name} = {min_val:.4f} degrees")
 
             fig.add_trace(
                 go.Scatter(
@@ -182,8 +213,11 @@ def extract_participant_data(
         f.write(f"Source File: {full_mot_path}\n")
         f.write("-" * 50 + "\n")
         for col_name, stats in min_max_stats.items():
+            max_str = ", ".join(f"{v:.4f}" for v in stats['max'])
+            min_str = ", ".join(f"{v:.4f}" for v in stats['min'])
             f.write(
-                f"{col_name}: max = {stats['max']:.4f} deg, min = {stats['min']:.4f} deg\n"
+                #f"{col_name}: max = {stats['max']:.4f} deg, min = {stats['min']:.4f} deg\n"
+                f"{col_name}: max = [{max_str}], min = [{min_str}] \n"
             )
 
     print(f"Saved min/max summary to: {txt_path}")
