@@ -171,7 +171,7 @@ def extract_participant_data(
             series = df_ik[col_name]
             max_vals = get_five_peaks(series)
             # five peaks finds highest, so we invert the series and then solve.
-            min_vals = -1*get_five_peaks(-1*series)
+            min_vals = get_five_peaks(-1*series)    #min vals are reported as positive for bar chart
             #max_val = float(series.max())
             #min_val = float(series.min())
             min_max_stats[col_name] = {"max": max_vals, "min": min_vals}
@@ -223,3 +223,28 @@ def extract_participant_data(
     print(f"Saved min/max summary to: {txt_path}")
     return min_max_stats
 
+def extract_des_angles(subject_path):
+    """This function takes in a subject_path and outputs a participant matrix (3D) of 3 depth
+    (weight condition), 9 rows (angles), and 5 columns (maximums or minimums from each squat)"""
+
+    squat_conditions = ["unweighted.mot", "weighted_10p.mot", "weighted_25p.mot"]
+    #extract all statistics
+    all_stats = {}
+    for condition in squat_conditions:
+        all_stats[condition] = extract_participant_data(subject_path, condition)
+    #stats = extract_participant_data(subject_path, condition)
+    
+    #extract relevant angles
+    participant_matrix = np.zeros((3,9,5))
+    for i in range(len(squat_conditions)): 
+        participant_matrix[i][0] = all_stats[squat_conditions[i]]["hip_flexion_r"]['max']
+        participant_matrix[i][1] = all_stats[squat_conditions[i]]["hip_flexion_l"]['min']
+        participant_matrix[i][2] = all_stats[squat_conditions[i]]["hip_adduction_r"]['min']
+        participant_matrix[i][3] = all_stats[squat_conditions[i]]["hip_adduction_l"]['min']
+        participant_matrix[i][4] = all_stats[squat_conditions[i]]["hip_rotation_r"]['max']
+        participant_matrix[i][5] = all_stats[squat_conditions[i]]["hip_rotation_l"]['max']
+        participant_matrix[i][6] = all_stats[squat_conditions[i]]["knee_angle_r"]['max']
+        participant_matrix[i][7] = all_stats[squat_conditions[i]]["knee_angle_l"]['max']
+        participant_matrix[i][8] = all_stats[squat_conditions[i]]["lumbar_extension"]['min']
+
+    return participant_matrix
