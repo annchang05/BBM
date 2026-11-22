@@ -132,37 +132,60 @@ def within_t_testing(participant_data, ANOVA_p_values):
     return ttest_p_values
 
 def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
-    """
+    """between_bar_charts takes in three 2D matrices: avg_untrained_matrix and avg_trained_matrix,
+       which include the avg angles (cols) for each condition (rows), as well as p_values, which
+       which includes the corresponding p-values for the t-tests between these matrices. This 
+       function creates three bar charts (one for each weight condition) comparing any signficant
+       angles for the trained & untrained participants.
     """
     #determine size 
     rows = len(avg_untrained_matrix) # each condition
     cols = len(avg_untrained_matrix[0]) # each angle type
+
+    #define angles
+    angles = ["Hip flexion (r)", "Hip flexion (l)", "Hip adduction (r)", "Hip adduction (l)",
+              "Hip rotation (r)", "Hip rotation (l)", "Knee angle (r)", "Knee angle (l)", 
+              "Trunk extension"]
     
     #extract significant data
     count = np.zeros(rows)
     for i in range(rows):
         count[i] = np.sum(p_values[i] < 0.05)
 
-    significant_untrained_uw = np.zeros(count[0])
-    significant_untrained_10p = np.zeros(count[1])
-    significant_untrained_25p = np.zeros(count[2])
-    significant_trained_uw = np.zeros(count[0])
-    significant_trained_10p = np.zeros(count[1])
-    significant_trained_25p = np.zeros(count[2])
+    #make empty vectors of lengths based on how many significant p-values
+    significant_untrained_uw = np.zeros(int(count[0]))
+    significant_untrained_10p = np.zeros(int(count[1]))
+    significant_untrained_25p = np.zeros(int(count[2]))
+    significant_trained_uw = np.zeros(int(count[0]))
+    significant_trained_10p = np.zeros(int(count[1]))
+    significant_trained_25p = np.zeros(int(count[2]))
+    significant_angles_uw = np.empty(int(count[0]), dtype=object)
+    significant_angles_10p = np.empty(int(count[1]), dtype=object)
+    significant_angles_25p = np.empty(int(count[2]), dtype=object)
+    significant_p_uw = np.zeros(int(count[0]))
+    significant_p_10p = np.zeros(int(count[1]))
+    significant_p_25p = np.zeros(int(count[2]))
     counter = [0, 0, 0]
 
+    #loop through angle types to add only significant angles to above vectors
     for j in range(cols):
         if p_values[0][j] < 0.05:
             significant_untrained_uw[counter[0]] = avg_untrained_matrix[0][j]
             significant_trained_uw[counter[0]] = avg_trained_matrix[0][j]
+            significant_angles_uw[counter[0]] = angles[j]
+            significant_p_uw[counter[0]] = p_values[0][j]
             counter[0] += 1
         if p_values[1][j] < 0.05:
             significant_untrained_10p[counter[1]] = avg_untrained_matrix[1][j]
             significant_trained_10p[counter[1]] = avg_trained_matrix[1][j]
+            significant_angles_10p[counter[1]] = angles[j]
+            significant_p_10p[counter[1]] = p_values[1][j]
             counter[1] += 1
         if p_values[2][j] < 0.05:
             significant_untrained_25p[counter[2]] = avg_untrained_matrix[2][j]
             significant_trained_25p[counter[2]] = avg_trained_matrix[2][j]
+            significant_angles_25p[counter[2]] = angles[j]
+            significant_p_25p[counter[2]] = p_values[2][j]
             counter[2] += 1
         else:
             continue
@@ -171,33 +194,117 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
     df_uw = pd.DataFrame({
             'Untrained': significant_untrained_uw,
             'Trained': significant_trained_uw
-            }, index=['Q1', 'Q2', 'Q3'])
-    # Automatically groups columns side-by-side per index row
+            }, index=significant_angles_uw)
+    #groups columns side-by-side per index row
     ax_uw = df_uw.plot(kind='bar', width=0.8, rot=0)
     ax_uw.set_ylabel('Angle (degrees)')
     ax_uw.set_title('Trained vs. Untrained Angles for Unweighted Condition')
+    #add stars for p-value significance
+    for bar_u, bar_t, p in zip(ax_uw.containers[0], ax_uw.containers[1], significant_p_uw):
+        x1 = bar_u.get_x() + bar_u.get_width() / 2
+        x2 = bar_t.get_x() + bar_t.get_width() / 2
+        y = max(bar_u.get_height(), bar_t.get_height()) + 0.5
+        stars = '***' if p < 0.001 else '**' if p < 0.01 else '*'
+        ax_uw.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
+        ax_uw.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
+    ax_uw.margins(y=0.15)
     plt.show()
 
     #make bar chart for 10% condition
     df_10p = pd.DataFrame({
                 'Untrained': significant_untrained_10p,
                 'Trained': significant_trained_10p
-                }, index=['Q1', 'Q2', 'Q3'])
-    # Automatically groups columns side-by-side per index row
+                }, index=significant_angles_10p)
+    #groups columns side-by-side per index row
     ax_10p = df_10p.plot(kind='bar', width=0.8, rot=0)
     ax_10p.set_ylabel('Angle (degrees)')
     ax_10p.set_title('Trained vs. Untrained Angles for 10% Loading Condition')
+    #add stars for p-value significance
+    for bar_u, bar_t, p in zip(ax_10p.containers[0], ax_10p.containers[1], significant_p_10p):
+        x1 = bar_u.get_x() + bar_u.get_width() / 2
+        x2 = bar_t.get_x() + bar_t.get_width() / 2
+        y = max(bar_u.get_height(), bar_t.get_height()) + 0.5
+        stars = '***' if p < 0.001 else '**' if p < 0.01 else '*'
+        ax_10p.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
+        ax_10p.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
+    ax_10p.margins(y=0.15)
     plt.show()
 
     #make bar chart for 25% condition
     df_25p = pd.DataFrame({
                 'Untrained': significant_untrained_25p,
                 'Trained': significant_trained_25p
-                }, index=['Q1', 'Q2', 'Q3'])
-    # Automatically groups columns side-by-side per index row
+                }, index=significant_angles_25p)
+    #groups columns side-by-side per index row
     ax_25p = df_25p.plot(kind='bar', width=0.8, rot=0)
     ax_25p.set_ylabel('Angle (degrees)')
     ax_25p.set_title('Trained vs. Untrained Angles for 25% Loading Condition')
+    #add stars for p-value significance
+    for bar_u, bar_t, p in zip(ax_25p.containers[0], ax_25p.containers[1], significant_p_25p):
+        x1 = bar_u.get_x() + bar_u.get_width() / 2
+        x2 = bar_t.get_x() + bar_t.get_width() / 2
+        y = max(bar_u.get_height(), bar_t.get_height()) + 0.5
+        stars = '***' if p < 0.001 else '**' if p < 0.01 else '*'
+        ax_25p.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
+        ax_25p.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
+    ax_25p.margins(y=0.15)
+    plt.show()
+
+    return
+
+def within_bar_chart(participant_avg, ttest_p_values, participant_name):
+    """
+    """
+    #determine size 
+    rows = len(participant_avg) # each condition
+    cols = len(participant_avg[0]) # each angle type
+
+    #define angles
+    angles = ["Hip flexion (r)", "Hip flexion (l)", "Hip adduction (r)", "Hip adduction (l)",
+              "Hip rotation (r)", "Hip rotation (l)", "Knee angle (r)", "Knee angle (l)", 
+              "Trunk extension"]
+
+    #extract significant data
+    count = np.zeros(cols) # count how many significant p-values for each angle type
+    for j in range(cols):
+        count[j] = np.sum(ttest_p_values[j] < 0.05)
+    significant_count = np.count_nonzero(count)
+
+    #make empty vectors of lengths based on how many significant p-values
+    significant_participant = np.zeros(int(significant_count))
+    significant_angles = np.empty(int(significant_count), dtype=object)
+    significant_p = np.zeros(int(significant_count))
+    counter = [0, 0, 0]
+
+    #loop through angle types to add only significant angles to above vectors
+    #for j in range(cols):
+        #if ttest_p_values[0][j] < 0.05:
+            #significant_participant[counter[0]] = avg_untrained_matrix[0][j]
+            #significant_angles[counter[0]] = angles[j]
+            #significant_p[counter[0]] = p_values[0][j]
+            #counter[0] += 1
+        #else:
+            #continue
+
+    #make bar chart
+    df = pd.DataFrame({
+            'Unweighted': significant_participant[0],
+            'Weighted 10%': significant_participant[1],
+            'Weighted 25%': significant_participant[2]
+            }, index=significant_angles)
+    #groups columns side-by-side per index row
+    ax = df.plot(kind='bar', width=0.8, rot=0)
+    ax.set_ylabel('Angle (degrees)')
+    ax.set_title('Loading Conditions for Particpant', participant_name)
+    #add stars for p-value significance
+    for bar_u, bar_t, p in zip(ax.containers[0], ax.containers[1], significant_p):
+        x1 = bar_u.get_x() + bar_u.get_width() / 2
+        x2 = bar_t.get_x() + bar_t.get_width() / 2
+        y = max(bar_u.get_height(), bar_t.get_height()) + 0.5
+        stars = '***' if p < 0.001 else '**' if p < 0.01 else '*'
+        ax.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
+        ax.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
+    ax.margins(y=0.15)
     plt.show()
 
     return
