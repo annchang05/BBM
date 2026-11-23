@@ -47,6 +47,7 @@ trained_matrix = trained_avgs(p_avg[trained[0]], p_avg[trained[1]],
 
 #find p-values
 between_pvals = between_t_testing(untrained_matrix, trained_matrix)
+print(between_pvals)
 
 # find average of trained and untrained matrices
 avg_untrained_matrix = avg_angles(untrained_matrix)
@@ -55,3 +56,16 @@ avg_trained_matrix = avg_angles(trained_matrix)
 #plot!
 between_bar_charts(avg_untrained_matrix, avg_trained_matrix,between_pvals)
 
+
+# WITHIN TESTING 
+
+#anova matrices for each participant in new dictionary (anova_pvals)
+anova_pvals = {name: within_ANOVA(matrix) for name, matrix in participants.items()}
+
+# get ttest p-vals (w/ Bonferroni correction) and put in a new dictionary, within_pvals
+for key in anova_pvals.keys():
+    within_pvals = {name: within_t_testing(participants[key],anova_pvals[key])}
+
+# plot!
+for key in within_pvals.keys():
+    within_bar_chart(p_avg[key],within_pvals[key],key)
