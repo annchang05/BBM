@@ -358,7 +358,7 @@ def within_bar_chart(participant_avg, ttest_p_values, participant_name):
                 stars = '***' if p < 0.001 else '**' if p < 0.01 else '*'
                 ax.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
                 ax.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
-                top_y = y + 3.0 # stack next bracket higher if multiple pairs are significant
+                top_y = y + 5.0 # stack next bracket higher if multiple pairs are significant
     ax.margins(y=0.2)
 
     #add footnote with p-value key
