@@ -220,9 +220,10 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
                     ha='center', va='top', fontsize=9, style='italic')
         
         plt.tight_layout()
-        plt.savefig("between_chart_unweighted.png", dpi=300, bbox_inches="tight")
+        print(f"Saving: between_chart_unweighted.png")
+        ax_uw.figure.savefig("between_chart_unweighted.png", dpi=300, bbox_inches="tight")
         plt.show()
-        plt.close()
+        plt.close(ax_uw.figure)
 
     #make bar chart for 10% condition
     if count[1] > 0:
@@ -250,9 +251,10 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
                     ha='center', va='top', fontsize=9, style='italic')
         
         plt.tight_layout()
-        plt.savefig("between_chart_weighted_10p.png", dpi=300, bbox_inches="tight")
+        print(f"Saving: between_chart_weighted_10p.png")
+        ax_10p.figure.savefig("between_chart_weighted_10p.png", dpi=300, bbox_inches="tight")
         plt.show()
-        plt.close()
+        plt.close(ax_10p.figure)
 
     #make bar chart for 25% condition
     if count[2] > 0:
@@ -280,9 +282,10 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
                     ha='center', va='top', fontsize=9, style='italic')
         
         plt.tight_layout()
-        plt.savefig("between_chart_weighted_25p.png", dpi=300, bbox_inches="tight")
+        print(f"Saving: between_chart_weighted_25p.png")
+        ax_25p.figure.savefig("between_chart_weighted_25p.png", dpi=300, bbox_inches="tight")
         plt.show()
-        plt.close()
+        plt.close(ax_25p.figure)
 
     return
 
@@ -362,10 +365,11 @@ def within_bar_chart(participant_avg, ttest_p_values, participant_name):
     ax.annotate('* p < 0.05,  ** p < 0.01,  *** p < 0.001',
             xy=(0.5, -0.18), xycoords='axes fraction',
             ha='center', va='top', fontsize=9, style='italic')
-    
+
     plt.tight_layout()
-    plt.savefig(f"within_bar_chart_{participant_name}.png", dpi=300, bbox_inches="tight")
+    print(f"Saving: within_bar_chart_{participant_name}.png")
+    ax.figure.savefig(f"within_bar_chart_{participant_name}.png", dpi=300, bbox_inches="tight")
     plt.show()
-    plt.close() # frees memory when looping through many charts
+    plt.close(ax.figure) # frees memory when looping through many charts
 
     return
