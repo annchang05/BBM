@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import plotly.graph_objects as go
 from scipy.signal import find_peaks
-
+ 
 def generate_dict(path):
     """Generating a dict for each given weight condition"""
     path_str = str(path)
@@ -238,7 +238,7 @@ def extract_des_angles(subject_path):
     participant_matrix = np.zeros((3,9,5))
     for i in range(len(squat_conditions)): 
         participant_matrix[i][0] = all_stats[squat_conditions[i]]["hip_flexion_r"]['max']
-        participant_matrix[i][1] = all_stats[squat_conditions[i]]["hip_flexion_l"]['min']
+        participant_matrix[i][1] = all_stats[squat_conditions[i]]["hip_flexion_l"]['max']
         participant_matrix[i][2] = all_stats[squat_conditions[i]]["hip_adduction_r"]['min']
         participant_matrix[i][3] = all_stats[squat_conditions[i]]["hip_adduction_l"]['min']
         participant_matrix[i][4] = all_stats[squat_conditions[i]]["hip_rotation_r"]['max']

@@ -5,6 +5,7 @@ import statistics as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import textwrap
 
 
 # participant_data = matrix of condition matrices which hold vectors for each angle
@@ -192,12 +193,17 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
         else:
             continue
 
+    #wrap angle text
+    wrapped_angles_uw = [textwrap.fill(label, width=12) for label in significant_angles_uw]
+    wrapped_angles_10p = [textwrap.fill(label, width=12) for label in significant_angles_10p]
+    wrapped_angles_25p = [textwrap.fill(label, width=12) for label in significant_angles_25p]
+    
     #make bar chart for unweighted condition
     if count[0] > 0:
         df_uw = pd.DataFrame({
                 'Untrained': significant_untrained_uw,
                 'Trained': significant_trained_uw
-                }, index=significant_angles_uw)
+                }, index=wrapped_angles_uw)
         #groups columns side-by-side per index row
         ax_uw = df_uw.plot(kind='bar', width=0.8, rot=0)
         ax_uw.set_ylabel('Angle (degrees)')
@@ -211,14 +217,17 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
             ax_uw.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
             ax_uw.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
         ax_uw.margins(y=0.15)
+        plt.tight_layout()
+        plt.savefig("between_chart_unweighted.png", dpi=300, bbox_inches="tight")
         plt.show()
+        plt.close()
 
     #make bar chart for 10% condition
     if count[1] > 0:
         df_10p = pd.DataFrame({
                     'Untrained': significant_untrained_10p,
                     'Trained': significant_trained_10p
-                    }, index=significant_angles_10p)
+                    }, index=wrapped_angles_10p)
         #groups columns side-by-side per index row
         ax_10p = df_10p.plot(kind='bar', width=0.8, rot=0)
         ax_10p.set_ylabel('Angle (degrees)')
@@ -232,14 +241,17 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
             ax_10p.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
             ax_10p.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
         ax_10p.margins(y=0.15)
+        plt.tight_layout()
+        plt.savefig("between_chart_weighted_10p.png", dpi=300, bbox_inches="tight")
         plt.show()
+        plt.close()
 
     #make bar chart for 25% condition
     if count[2] > 0:
         df_25p = pd.DataFrame({
                     'Untrained': significant_untrained_25p,
                     'Trained': significant_trained_25p
-                    }, index=significant_angles_25p)
+                    }, index=wrapped_angles_25p)
         #groups columns side-by-side per index row
         ax_25p = df_25p.plot(kind='bar', width=0.8, rot=0)
         ax_25p.set_ylabel('Angle (degrees)')
@@ -253,7 +265,11 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
             ax_25p.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
             ax_25p.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
         ax_25p.margins(y=0.15)
+        
+        plt.tight_layout()
+        plt.savefig("between_chart_weighted_25p.png", dpi=300, bbox_inches="tight")
         plt.show()
+        plt.close()
 
     return
 
@@ -287,6 +303,9 @@ def within_bar_chart(participant_avg, ttest_p_values, participant_name):
     significant_angles = np.empty(int(significant_count), dtype=object)
     significant_p = np.zeros((rows, int(significant_count)))
     counter = 0
+
+    #wrap angle text
+    wrapped_angles = [textwrap.fill(label, width=12) for label in significant_angles]
 
     #loop through angle types to add only significant angles to above vectors
     for j in range(cols):
@@ -326,9 +345,12 @@ def within_bar_chart(participant_avg, ttest_p_values, participant_name):
                 stars = '***' if p < 0.001 else '**' if p < 0.01 else '*'
                 ax.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
                 ax.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
-                top_y = y + 1.2 # stack next bracket higher if multiple pairs are significant
+                top_y = y + 3.0 # stack next bracket higher if multiple pairs are significant
     ax.margins(y=0.2)
 
+    plt.tight_layout()
+    plt.savefig(f"within_bar_chart_{participant_name}.png", dpi=300, bbox_inches="tight")
     plt.show()
+    plt.close() # frees memory when looping through many charts
 
     return
