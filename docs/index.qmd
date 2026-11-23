@@ -17,5 +17,4 @@ Stretch goal: How do muscle forces change across progressive loading during squa
 - Do joint kinematics and kinetics change such that they no longer match proper form as the load of a squat increases? 
 - How does the above compare between people and to the proper squatting form determined from previous literature?
 
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+To learn some background information about squatting biology and the motivations for this project, visit the [Background page](background_information/background.qmd).  

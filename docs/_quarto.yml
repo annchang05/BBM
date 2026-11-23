@@ -14,8 +14,10 @@ website:
         text: Methods
       - href: results/results.qmd
         text: Results
-      - href: analysis_discussion/analysis_discussion.qmd
+      - href: a_d/analysis_discussion.qmd
         text: Analysis and Discussion
+      - href: sources.qmd
+        text: Sources
       - about.qmd
 
 format:
