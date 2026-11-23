@@ -144,9 +144,9 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
     cols = len(avg_untrained_matrix[0]) # each angle type
 
     #define angles
-    angles = ["Hip flexion (r)", "Hip flexion (l)", "Hip adduction (r)", "Hip adduction (l)",
-              "Hip rotation (r)", "Hip rotation (l)", "Knee angle (r)", "Knee angle (l)", 
-              "Trunk extension"]
+    angles = ["Hip\nflexion\n(r)", "Hip\nflexion\n(l)", "Hip\nadduction\n(r)", 
+              "Hip\nadduction\n(l)", "Hip\nrotation\n(r)", "Hip\nrotation\n(l)",
+              "Knee\nangle\n(r)", "Knee\nangle\n(l)", "Trunk\nextension"]
     
     #extract significant data
     count = np.zeros(rows)
@@ -193,17 +193,13 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
         else:
             continue
 
-    #wrap angle text
-    wrapped_angles_uw = [textwrap.fill(label, width=12) for label in significant_angles_uw]
-    wrapped_angles_10p = [textwrap.fill(label, width=12) for label in significant_angles_10p]
-    wrapped_angles_25p = [textwrap.fill(label, width=12) for label in significant_angles_25p]
     
     #make bar chart for unweighted condition
     if count[0] > 0:
         df_uw = pd.DataFrame({
                 'Untrained': significant_untrained_uw,
                 'Trained': significant_trained_uw
-                }, index=wrapped_angles_uw)
+                }, index=significant_angles_uw)
         #groups columns side-by-side per index row
         ax_uw = df_uw.plot(kind='bar', width=0.8, rot=0)
         ax_uw.set_ylabel('Angle (degrees)')
@@ -233,7 +229,7 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
         df_10p = pd.DataFrame({
                     'Untrained': significant_untrained_10p,
                     'Trained': significant_trained_10p
-                    }, index=wrapped_angles_10p)
+                    }, index=significant_angles_10p)
         #groups columns side-by-side per index row
         ax_10p = df_10p.plot(kind='bar', width=0.8, rot=0)
         ax_10p.set_ylabel('Angle (degrees)')
@@ -263,7 +259,7 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
         df_25p = pd.DataFrame({
                     'Untrained': significant_untrained_25p,
                     'Trained': significant_trained_25p
-                    }, index=wrapped_angles_25p)
+                    }, index=significant_angles_25p)
         #groups columns side-by-side per index row
         ax_25p = df_25p.plot(kind='bar', width=0.8, rot=0)
         ax_25p.set_ylabel('Angle (degrees)')
@@ -303,9 +299,9 @@ def within_bar_chart(participant_avg, ttest_p_values, participant_name):
     cols = len(participant_avg[0]) # each angle type
 
     #define angles
-    angles = ["Hip flexion (r)", "Hip flexion (l)", "Hip adduction (r)", "Hip adduction (l)",
-              "Hip rotation (r)", "Hip rotation (l)", "Knee angle (r)", "Knee angle (l)", 
-              "Trunk extension"]
+    angles = ["Hip\nflexion\n(r)", "Hip\nflexion\n(l)", "Hip\nadduction\n(r)", 
+              "Hip\nadduction\n(l)", "Hip\nrotation\n(r)", "Hip\nrotation\n(l)",
+              "Knee\nangle\n(r)", "Knee\nangle\n(l)", "Trunk\nextension"]
 
     #extract significant data
     count = np.zeros(cols) # count how many significant p-values for each angle type
@@ -320,9 +316,6 @@ def within_bar_chart(participant_avg, ttest_p_values, participant_name):
     significant_angles = np.empty(int(significant_count), dtype=object)
     significant_p = np.zeros((rows, int(significant_count)))
     counter = 0
-
-    #wrap angle text
-    wrapped_angles = [textwrap.fill(label, width=12) for label in significant_angles]
 
     #loop through angle types to add only significant angles to above vectors
     for j in range(cols):
