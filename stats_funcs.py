@@ -217,6 +217,12 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
             ax_uw.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
             ax_uw.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
         ax_uw.margins(y=0.15)
+
+        #add footnote with p-value key
+        ax_uw.annotate('* p < 0.05,  ** p < 0.01,  *** p < 0.001',
+                    xy=(0.5, -0.18), xycoords='axes fraction',
+                    ha='center', va='top', fontsize=9, style='italic')
+        
         plt.tight_layout()
         plt.savefig("between_chart_unweighted.png", dpi=300, bbox_inches="tight")
         plt.show()
@@ -241,6 +247,12 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
             ax_10p.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
             ax_10p.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
         ax_10p.margins(y=0.15)
+        
+        #add footnote with p-value key
+        ax_10p.annotate('* p < 0.05,  ** p < 0.01,  *** p < 0.001',
+                    xy=(0.5, -0.18), xycoords='axes fraction',
+                    ha='center', va='top', fontsize=9, style='italic')
+        
         plt.tight_layout()
         plt.savefig("between_chart_weighted_10p.png", dpi=300, bbox_inches="tight")
         plt.show()
@@ -265,6 +277,11 @@ def between_bar_charts(avg_untrained_matrix, avg_trained_matrix, p_values):
             ax_25p.plot([x1, x1, x2, x2], [y, y + 0.5, y + 0.5, y], lw=1.2, c='black')
             ax_25p.text((x1 + x2) / 2, y + 0.5, stars, ha='center', va='bottom', color='black')
         ax_25p.margins(y=0.15)
+
+        #add footnote with p-value key
+        ax_25p.annotate('* p < 0.05,  ** p < 0.01,  *** p < 0.001',
+                    xy=(0.5, -0.18), xycoords='axes fraction',
+                    ha='center', va='top', fontsize=9, style='italic')
         
         plt.tight_layout()
         plt.savefig("between_chart_weighted_25p.png", dpi=300, bbox_inches="tight")
@@ -348,6 +365,11 @@ def within_bar_chart(participant_avg, ttest_p_values, participant_name):
                 top_y = y + 3.0 # stack next bracket higher if multiple pairs are significant
     ax.margins(y=0.2)
 
+    #add footnote with p-value key
+    ax.annotate('* p < 0.05,  ** p < 0.01,  *** p < 0.001',
+            xy=(0.5, -0.18), xycoords='axes fraction',
+            ha='center', va='top', fontsize=9, style='italic')
+    
     plt.tight_layout()
     plt.savefig(f"within_bar_chart_{participant_name}.png", dpi=300, bbox_inches="tight")
     plt.show()
